@@ -171,4 +171,3 @@ janela = Tk()
 caracteristicas_janela()
 front_login()
 janela.mainloop()
-a
