@@ -116,7 +116,7 @@ def lobby():
         frame_lobby.destroy()
         frame_produto = Frame(janela, width=800, height=600, bg='#000000')
         frame_produto.pack()
-        if cargo_user == 'Atendente':
+        if user_cargo == 'Atendente':
             for i in range(0, len(produtos)):
                 text = f'{i}- Produto: {produtos[i]["nome"]} | Preço: {produtos[i]["preco"]} |  Quantidade: {produtos[i]["quantidade"]}'
                 lb= Label(frame_produto, text=text, background='#000000', foreground='#FFFAFA', font='Arial, 17')
