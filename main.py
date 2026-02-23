@@ -282,4 +282,5 @@ def lobby():
 janela = Tk()
 caracteristicas_janela()
 front_login()
+
 janela.mainloop()
