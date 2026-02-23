@@ -7,6 +7,11 @@ cargos =['Atendente', 'Gerente']
 #Estados do usuario
 user_log = user_cargo =''
 #Dando forma a janela principal
+def info_cadastro(local, framep, texto, cor, pos1, pos2):
+        local = Frame(framep,background='#000000', width=350, height=20)
+        local.place(relx=pos1, rely=pos2)
+        erro = Message(local, text=texto, background='#000000', font='Arial, 8', foreground= cor, width=300)
+        erro.place(relx=0.29)
 def caracteristicas_janela():
     janela_largura= 800
     janela_altura= 600
@@ -85,6 +90,19 @@ def lobby():
                         else:
                             return False
                 if verificacao(contas_existentes) == False:
+                    def fim_cadastro():
+                        senha_admin = entry_senha_admin.get()
+                        if senha_admin == 'ADIMIN':
+                                entry_newuser.delete(0, END)
+                                entry_newcargo.delete(0, END)
+                                entry_newsenha.delete(0, END)
+                                frame_cadastro.destroy
+                                cadastrar_usurario()
+                                cadastro_janela.destroy()
+                                p = {'user': new_user, 'senha': new_senha, 'cargo': new_cargo}
+                                contas_existentes.append(p)
+                        else:
+                            info_cadastro(label_erro, cadastro_janela, 'Senha Invalida', "#FF0000", 0.23, 0.6 )
                     if new_cargo in cargos:
                         cadastro_janela = Tk()
                         cadastro_janela_largura= 400
@@ -102,33 +120,18 @@ def lobby():
                         admin_senha =Label(cadastro_janela, text='Senha Adimin', foreground='#FFFAFA', bg='#000000')
                         admin_senha.place(relx= 0.12, rely=0.5)
                         entry_senha_admin= Entry(cadastro_janela)
-                        entry_senha_admin.place(relx=0.25, rely=0.5)
+                        entry_senha_admin.place(relx=0.35, rely=0.5)
+                        btn = Button(cadastro_janela, text='Validar', width=25, command=fim_cadastro)
+                        btn.place(relx=0.3, rely=0.7)
+                        label_erro = Frame(cadastro_janela, background='#000000', width=250, height= 20)
+                        cadastro_janela.mainloop()
+
                     else:
-                        label_erro = Label(frame_cadastro, text='Cargo Não Existe!', foreground="#FF0000", bg="#000000", font='Arial, 10', width=50)
-                        label_erro.place(relx=0.25, rely=0.6)
+                        info_cadastro(label_erro1, frame_cadastro, 'O cargo não existe!', "#FF0000", 0.23, 0.6 )
                 else:
-                    label_erro = Label(frame_cadastro, text='O usuario já foi cadastrado!', foreground="#FF0000", bg="#000000", font='Arial, 10', width=50)
-                    label_erro.place(relx=0.25, rely=0.6)
-                def fim_cadastro():
-                    senha_admin = entry_senha_admin.get()
-                    if senha_admin == 'ADIMIN':
-                            entry_newuser.delete(0, END)
-                            entry_newcargo.delete(0, END)
-                            entry_newsenha.delete(0, END)
-                            frame_cadastro.destroy
-                            cadastrar_usurario()
-                            cadastro_janela.destroy()
-                            p = {'user': new_user, 'senha': new_senha, 'cargo': new_cargo}
-                            contas_existentes.append(p)
-                    else:
-                        label_error = Label(cadastro_janela, text='Senha invalida', foreground="#FF0000", bg="#000000", font='Arial, 10')
-                        label_error.place(relx=0.35, rely=0.6)
-                    btn = Button(cadastro_janela, text='Validar', width=25, command=fim_cadastro)
-                    btn.place(relx=0.3, rely=0.7)
-                    cadastro_janela.mainloop()
+                    info_cadastro(label_erro1, frame_cadastro, 'O usuario já foi cadastrado!', "#FF0000", 0.23, 0.6 )
             else:
-                erro_label = Label(frame_cadastro, text='Os campos não podem estar vazios!', foreground="#FF0000", bg='#000000', width=50)
-                erro_label.place(relx=0.25, rely= 0.6)
+                info_cadastro(label_erro1, frame_cadastro, 'Os campos devem estar preenchidos', "#FF0000", 0.23, 0.6 )
             
         #Botão de voltar lobby
         def voltar():
@@ -157,11 +160,56 @@ def lobby():
         label_newid.place(relx= 0.47, rely=0.5)
         entry_newid= Entry(frame_cadastro)
         entry_newid.place(relx=0.6, rely=0.5)
-
+        
+        label_erro1 = Frame(frame_cadastro, background='#000000', width=250, height= 20)
         bnt_cadastrar_new_user = Button(frame_cadastro, text='Cadastrar',width=25, command=new_usuario)
         bnt_cadastrar_new_user.place(relx=0.28, rely= 0.7)
         bnt_cadastrar_new_user = Button(frame_cadastro, text='voltar', width=15 ,command=voltar)
-        bnt_cadastrar_new_user.place(relx=0.55, rely= 0.7)
+        bnt_cadastrar_new_user.place(relx=0.55, rely= 0.7) 
+    #Adicionar novo produto
+    def add_produto():
+        def voltar():
+            frame_new_produto.destroy()
+            lobby()
+        frame_lobby.destroy()
+        frame_new_produto = Frame(janela, width=800, height=600, bg='#000000')
+        frame_new_produto.pack()
+        add_label = Label(frame_new_produto,text= 'Adição de Produto', background='#000000', foreground='#FFFAFA', font='Arial, 17')
+        add_label.place(relx=0.37, rely=0.1)
+        name_label_add = Label(frame_new_produto, text='Nome', font='Arial, 12', foreground='#FFFAFA', background='#000000')
+        name_label_add.place(relx= 0.11,  rely = 0.3)
+        name_entry_add = Entry(frame_new_produto, width= 30)
+        name_entry_add.place(relx= 0.24, rely=0.3)
+        preco_label_add = Label(frame_new_produto, text='Preço', font='Arial, 12', foreground='#FFFAFA', background='#000000')
+        preco_label_add.place(relx= 0.11,  rely = 0.4)
+        preco_entry_add = Entry(frame_new_produto, width= 30)
+        preco_entry_add.place(relx= 0.24, rely=0.4)
+        qt_label_add = Label(frame_new_produto, text='Quantidade', font='Arial, 12', foreground='#FFFAFA', background='#000000')
+        qt_label_add.place(relx= 0.11,  rely = 0.5)
+        qt_entry_add = Entry(frame_new_produto, width= 30)
+        qt_entry_add.place(relx= 0.24, rely=0.5)
+        def add_new():
+            new_nome = name_entry_add.get()
+            new_preco=preco_entry_add.get()
+            new_qt= qt_entry_add.get()
+            if new_nome != '' and new_preco != '' and new_qt != '':
+                try:
+                    a = int(new_preco)
+                    b = int(new_qt)
+                    p = {'nome': new_nome, 'preco': new_preco, 'quantidade': new_qt}
+                    produtos.append(p)
+                    name_entry_add.delete(0, END)
+                    preco_entry_add.delete(0, END)
+                    qt_entry_add.delete(0, END)
+                except:
+                    info_cadastro(label_erro, frame_new_produto, 'O preço e a qauntidades devem ser numeros', "#FF0000", 0.23, 0.6 )
+            else:
+                info_cadastro(label_erro, frame_new_produto, 'Os campos devem estar preenchidos', "#FF0000", 0.23, 0.6 )
+        btn_add = Button(frame_new_produto, width= 25,text='Atualizar', command=add_new)
+        btn_add.place(relx=0.63, rely=0.4)
+        bnt_add_voltar = Button(frame_new_produto, text='voltar', width=15 ,command=voltar)
+        bnt_add_voltar.place(relx=0.63, rely= 0.5)
+        label_erro = Frame(frame_new_produto, background='#000000', width=250, height= 20)
     #botão para ver os produtos
     def ver_produto():
         #botão de excluir os produtos
@@ -210,13 +258,12 @@ def lobby():
                         frame_edit.destroy()
                         return lobby()
                     except:
-                        erro_laber = Label(frame_edit, text='O Preço deve ser um valor númerico e a Quantidade também!', bg='#000000', foreground="#FF0000")
-                        erro_laber.place(relx=0.33, rely=0.6)
+                        info_cadastro(label_erro3, frame_edit, 'Preço e quantidade deve ser um valor numerico', "#FF0000", 0.23, 0.6 )
                 else:
-                    erro_laber = Label(frame_edit, text='Preencha os campos!', bg='#000000', foreground="#FF0000")
-                    erro_laber.place(relx=0.43, rely=0.6)
+                    info_cadastro(label_erro3, frame_edit, 'Os campos devem estar preenchidos', "#FF0000", 0.23, 0.6 )
             btn_edit = Button(frame_edit, width= 25,text='Atualizar', command=atl_list)
             btn_edit.place(relx=0.63, rely=0.4)
+            label_erro3 = Frame(frame_edit, background='#000000', width=250, height= 20)
             #botão para voltar o loby
             def back_lobby():
                 frame_edit.destroy()
@@ -260,6 +307,11 @@ def lobby():
             btn_lobby.place(relx=0.38, rely=a+0.8)
     frame_lobby = Frame(janela, width=800 , height=600, bg='#000000')
     frame_lobby.place(relx=0) 
+    def sair():
+            frame_lobby.destroy()
+            front_login()
+    bnt_logaut = Button(frame_lobby,text='Sair', width=15, command=sair)
+    bnt_logaut.place(relx=0.04, rely=0.02)
     img_user = PhotoImage(file="eu.png")
     img = Label(frame_lobby, image=img_user, width=200, height=200)
     img.place(relx = 0.35, rely=0.1)
@@ -275,7 +327,7 @@ def lobby():
     else:
         bnt_cadastro = Button(frame_lobby, text='Cadastrar usuario',  width=15, command=cadastrar_usurario)
         bnt_cadastro.place(relx = 0.32, rely = 0.65)
-        bnt_adicionar = Button(frame_lobby, text='Adicionar produto',  width=15)
+        bnt_adicionar = Button(frame_lobby, text='Adicionar produto',  width=15, command=add_produto)
         bnt_adicionar.place(relx = 0.48, rely = 0.65)
         bnt_produtos = Button(frame_lobby, text='Ver Produtos',  width=20, command=ver_produto)
         bnt_produtos.place(relx = 0.38, rely = 0.7)
