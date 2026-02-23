@@ -78,27 +78,37 @@ def lobby():
             new_senha = entry_newsenha.get()
             new_cargo = entry_newcargo.get()
             if new_cargo != '' and new_senha != '' and new_user != '':
-                if new_cargo in cargos:
-                    cadastro_janela = Tk()
-                    cadastro_janela_largura= 400
-                    cadastro_janela_altura= 300
-                    tela_largura = janela.winfo_screenwidth()
-                    tela_altura= janela.winfo_screenheight()
-                    posx= tela_largura / 2 - cadastro_janela_largura/2 
-                    posy= tela_altura/2 - cadastro_janela_altura/2
-                    cadastro_janela.title("Pro Estoque")
-                    cadastro_janela.geometry('%dx%d+%d+%d' %(cadastro_janela_largura, cadastro_janela_altura, posx,posy))
-                    cadastro_janela.resizable(False, False)
-                    cadastro_janela.config(background="#000000")
-                    admin_label = Label(cadastro_janela, text='Digite a senha de adimim', font='Arial, 15', foreground='#FFFAFA', bg='#000000')
-                    admin_label.place(relx=0.2, rely=0.2)
-                    admin_senha =Label(cadastro_janela, text='Senha Adimin', foreground='#FFFAFA', bg='#000000')
-                    admin_senha.place(relx= 0.12, rely=0.5)
-                    entry_senha_admin= Entry(cadastro_janela)
-                    entry_senha_admin.place(relx=0.25, rely=0.5)
+                def verificacao(a):
+                    for i in a:
+                        if new_user == i['user']:
+                            return True
+                        else:
+                            return False
+                if verificacao(contas_existentes) == False:
+                    if new_cargo in cargos:
+                        cadastro_janela = Tk()
+                        cadastro_janela_largura= 400
+                        cadastro_janela_altura= 300
+                        tela_largura = janela.winfo_screenwidth()
+                        tela_altura= janela.winfo_screenheight()
+                        posx= tela_largura / 2 - cadastro_janela_largura/2 
+                        posy= tela_altura/2 - cadastro_janela_altura/2
+                        cadastro_janela.title("Pro Estoque")
+                        cadastro_janela.geometry('%dx%d+%d+%d' %(cadastro_janela_largura, cadastro_janela_altura, posx,posy))
+                        cadastro_janela.resizable(False, False)
+                        cadastro_janela.config(background="#000000")
+                        admin_label = Label(cadastro_janela, text='Digite a senha de adimim', font='Arial, 15', foreground='#FFFAFA', bg='#000000')
+                        admin_label.place(relx=0.2, rely=0.2)
+                        admin_senha =Label(cadastro_janela, text='Senha Adimin', foreground='#FFFAFA', bg='#000000')
+                        admin_senha.place(relx= 0.12, rely=0.5)
+                        entry_senha_admin= Entry(cadastro_janela)
+                        entry_senha_admin.place(relx=0.25, rely=0.5)
+                    else:
+                        label_erro = Label(frame_cadastro, text='Cargo Não Existe!', foreground="#FF0000", bg="#000000", font='Arial, 10', width=50)
+                        label_erro.place(relx=0.25, rely=0.6)
                 else:
-                    label_error = Label(frame_cadastro, text='Cargo Não Existe!', foreground="#FF0000", bg="#000000", font='Arial, 10')
-                    label_error.place(relx=0.45, rely=0.6)
+                    label_erro = Label(frame_cadastro, text='O usuario já foi cadastrado!', foreground="#FF0000", bg="#000000", font='Arial, 10', width=50)
+                    label_erro.place(relx=0.25, rely=0.6)
                 def fim_cadastro():
                     senha_admin = entry_senha_admin.get()
                     if senha_admin == 'ADIMIN':
@@ -110,15 +120,14 @@ def lobby():
                             cadastro_janela.destroy()
                             p = {'user': new_user, 'senha': new_senha, 'cargo': new_cargo}
                             contas_existentes.append(p)
-                            print(contas_existentes)
                     else:
                         label_error = Label(cadastro_janela, text='Senha invalida', foreground="#FF0000", bg="#000000", font='Arial, 10')
                         label_error.place(relx=0.35, rely=0.6)
-                btn = Button(cadastro_janela, text='Validar', width=25, command=fim_cadastro)
-                btn.place(relx=0.3, rely=0.7)
-                cadastro_janela.mainloop()
+                    btn = Button(cadastro_janela, text='Validar', width=25, command=fim_cadastro)
+                    btn.place(relx=0.3, rely=0.7)
+                    cadastro_janela.mainloop()
             else:
-                erro_label = Label(frame_cadastro, text='Os campos não podem estar vazios!', foreground="#FF0000", bg='#000000')
+                erro_label = Label(frame_cadastro, text='Os campos não podem estar vazios!', foreground="#FF0000", bg='#000000', width=50)
                 erro_label.place(relx=0.25, rely= 0.6)
             
         #Botão de voltar lobby
