@@ -12,3 +12,7 @@ class Produto:
         self.quantidade = quantidade
         self.nome = nome
         self.id = id
+
+    def __str__(self):
+        text =f'Nome: {self.nome} | Preco: {self.preco} | Quantidade: {self.quantidade}'
+        return text

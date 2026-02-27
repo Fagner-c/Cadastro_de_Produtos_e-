@@ -90,7 +90,7 @@ def lobby():
             if new_cargo != '' and new_senha != '' and new_user != '':
                 def verificacao(a):
                     for i in a:
-                        if new_user == i['user']:
+                        if new_user == i.nome:
                             return True
                         else:
                             return False
@@ -104,8 +104,8 @@ def lobby():
                                 frame_cadastro.destroy
                                 cadastrar_usurario()
                                 cadastro_janela.destroy()
-                                p = {'user': new_user, 'senha': new_senha, 'cargo': new_cargo}
-                                contas_existentes.append(p)
+                                new_u = Trabalhador(new_cargo,'0-0000', new_senha, new_user)
+                                contas_existentes.append(new_u)
                         else:
                             info_cadastro(label_erro, cadastro_janela, 'Senha Invalida', "#FF0000", 0.23, 0.6 )
                     if new_cargo in cargos:
@@ -201,8 +201,8 @@ def lobby():
                 try:
                     a = int(new_preco)
                     b = int(new_qt)
-                    p = {'nome': new_nome, 'preco': new_preco, 'quantidade': new_qt}
-                    produtos.append(p)
+                    new_p = Produto(new_preco, new_qt, new_nome , '000000')
+                    produtos.append(new_p)
                     name_entry_add.delete(0, END)
                     preco_entry_add.delete(0, END)
                     qt_entry_add.delete(0, END)
@@ -233,8 +233,7 @@ def lobby():
             frame_produto.destroy()
             edt_label = Label(frame_edit,text= 'Edição de Produto', background='#000000', foreground='#FFFAFA', font='Arial, 17')
             edt_label.place(relx=0.38, rely=0.05)
-            text = f' Produto: {produtos[pos]["nome"]} | Preço: {produtos[pos]["preco"]} |  Quantidade: {produtos[pos]["quantidade"]}'
-            edt_label = Label(frame_edit,text= text, background='#000000', foreground='#FFFAFA', font='Arial, 17')
+            edt_label = Label(frame_edit,text= produtos[t], background='#000000', foreground='#FFFAFA', font='Arial, 17')
             edt_label.place(relx=0.2, rely=0.2)
             name_label_edit = Label(frame_edit, text='Nome', font='Arial, 12', foreground='#FFFAFA', background='#000000')
             name_label_edit.place(relx= 0.11,  rely = 0.3)
@@ -248,6 +247,7 @@ def lobby():
             qt_label_edit.place(relx= 0.11,  rely = 0.5)
             qt_entry_edit = Entry(frame_edit, width= 30)
             qt_entry_edit.place(relx= 0.24, rely=0.5)
+            print(produtos)
             #Botão que alva as mudanças do produto
             def atl_list():
                 new_nome = name_entry_edit.get()
@@ -255,11 +255,11 @@ def lobby():
                 new_qt= qt_entry_edit.get()
                 if new_nome != '' and new_preco != '' and new_qt != '':
                     try:
-                        a = int(new_preco)
+                        a = float(new_preco)
                         b = int(new_qt)
-                        produtos[pos]['nome'] = new_nome
-                        produtos[pos]['preco']  = new_preco
-                        produtos[pos]['quantidade'] = new_qt
+                        produtos[pos].nome = new_nome
+                        produtos[pos].preco  = new_preco
+                        produtos[pos].quantidade = new_qt
                         frame_edit.destroy()
                         return lobby()
                     except:
@@ -281,8 +281,7 @@ def lobby():
         #verificando o cargo do user
         if user_cargo == 'Atendente':
             for i in range(0, len(produtos)):
-                text = f'{i}- Produto: {produtos[i]["nome"]} | Preço: {produtos[i]["preco"]} |  Quantidade: {produtos[i]["quantidade"]}'
-                lb= Label(frame_produto, text=text, background='#000000', foreground='#FFFAFA', font='Arial, 17')
+                lb= Label(frame_produto, text=produtos[i], background='#000000', foreground='#FFFAFA', font='Arial, 17')
                 lb.pack()
             def back_lobby():
                 frame_produto.destroy()
@@ -292,8 +291,7 @@ def lobby():
         else:
             a = 0
             for t in range(0, len(produtos)):
-                text = f'{t+1}- Produto: {produtos[t]["nome"]} | Preço: {produtos[t]["preco"]} |  Quantidade: {produtos[t]["quantidade"]} '
-                lb1= Label(frame_produto, text=text, background='#000000', foreground='#FFFAFA', font='Arial, 17')
+                lb1= Label(frame_produto, text=produtos[t], background='#000000', foreground='#FFFAFA', font='Arial, 17')
                 lb1.place(relx=0, rely=a +0.05)
                 btn = Button(frame_produto, text='excluir', width=15)
                 btn.place(relx=0.7, rely=a+0.05)
