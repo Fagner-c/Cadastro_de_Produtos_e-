@@ -1,12 +1,38 @@
 from tkinter import *
+from main_class import *
 #contas 
-contas_existentes = [{'user': 'Fagner Cardoso', 'senha': 'abacate', 'cargo': 'Gerente'}, {'user': 'Luiz Carlos', 'senha': 'cid', 'cargo': 'Atendente'}]
+tb1 = Trabalhador('Gerente', '1234345', 'abacate', 'Fagner Cardoso')
+tb2= Trabalhador('Atendente', '231434', 'cid', 'Luiz Carlos')
+contas_existentes = [tb1, tb2]
 #produtos
-produtos = [{'nome': 'Abacate', 'preco': 8.00, 'quantidade': 120}, {'nome': 'Abacate', 'preco': 8.00, 'quantidade': 110}]
+p1 = Produto(12.90, 34, 'abacate', '132344')
+p2 = Produto(34.80, 80, 'melão', '780980')
+produtos = [p1, p2]
 cargos =['Atendente', 'Gerente']
 #Estados do usuario
 user_log = user_cargo =''
-#Dando forma a janela principal
+
+def validar_senha(senha_digitada, user_digitado, contas_existentes, frame):
+        global user_log, user_cargo
+        for us in contas_existentes:
+            if user_digitado == us.nome:
+                if us.senha == senha_digitada:
+                    user_log = user_digitado
+                    user_cargo = us.cargo
+                    frame.destroy()
+                    return lobby()
+                else:
+                    erro_label = Label(frame, text='Senha invalida!',foreground='#FF0000', bg='#000000' )
+                    erro_label.place(relx= 0.43, rely= 0.49)
+                    return False
+def validar_login(user, senha, conta, frame):
+        for us in contas_existentes:
+            if user == us.nome:
+                    return validar_senha(senha, user, conta, frame)
+            else:
+                erro_label = Label(frame, text='Usuario invalido!',foreground='#FF0000', bg='#000000' )
+                erro_label.place(relx= 0.43, rely= 0.49)
+
 def info_cadastro(local, framep, texto, cor, pos1, pos2):
         local = Frame(framep,background='#000000', width=350, height=20)
         local.place(relx=pos1, rely=pos2)
@@ -26,28 +52,13 @@ def caracteristicas_janela():
     janela.config(background="#000000")
 #Pagina do login dos usuarios
 def front_login():
-    #validando se a senha existe
-    def validar_senha(senha_digitada, user_digitado, contas_existentes):
-        global user_log, user_cargo
-        for us in contas_existentes:
-            if user_digitado == us['user']:
-                if us['senha'] == senha_digitada:
-                    user_log = user_digitado
-                    user_cargo = us['cargo']
-                    frame_login.destroy()
-                    return lobby()
-                else:
-                    erro_label = Label(frame_login, text='Senha invalida!',foreground='#FF0000', bg='#000000' )
-                    erro_label.place(relx= 0.43, rely= 0.49)
-                    return False
-    #verificando se o usuario existe
-    def validar_login(user, senha, conta):
-        for us in contas_existentes:
-            if user == us['user']:
-                    return validar_senha(senha, user, conta)
-            else:
-                erro_label = Label(frame_login, text='Usuario invalido!',foreground='#FF0000', bg='#000000' )
-                erro_label.place(relx= 0.43, rely= 0.49)
+    def bnt_login_code():
+        user = user_entry.get()
+        senha =  senha_entry.get()
+        if validar_login(user, senha, contas_existentes, frame_login) == False:
+            senha_entry.delete(0, END)
+        else:
+            return True
 
     frame_login = Frame(janela, bg="#000000", width=800, height=600)
     frame_login.place(relx=0)
@@ -64,13 +75,7 @@ def front_login():
     senha_entry = Entry(frame_login, width= 30)
     senha_entry.place(relx= 0.4, rely=0.44)
     #Botão que verifica se esta tudo certo para o login
-    def bnt_login_code():
-        user = user_entry.get()
-        senha =  senha_entry.get()
-        if validar_login(user, senha, contas_existentes) == False:
-            senha_entry.delete(0, END)
-        else:
-            return True
+    
     bnt_login = Button(frame_login, text='Login', width= 20, command=bnt_login_code)
     bnt_login.place(relx= 0.398, rely= 0.55)
 #Lobby principal do sistema
